@@ -1,4 +1,5 @@
 # Maintainer: Simon Gomizelj <simongmzlj@gmail.com>
+# Contributor: Marcel Huber <`echo "moc tknup liamg tä oofrebuhlecram" | rev`>
 
 pkgname=envoy-git
 pkgver=7.r8.gf510efd
@@ -12,13 +13,13 @@ optdepends=('gnupg: gpg-agent support')
 makedepends=('git' 'ragel')
 conflicts=('envoy')
 provides=('envoy')
-source=('git+git://github.com/vodik/envoy.git'
+source=("$pkgname"::'git+git://github.com/vodik/envoy.git'
         'git+git://github.com/vodik/clique.git')
 sha1sums=('SKIP'
           'SKIP')
 
 pkgver() {
-  cd ${pkgname%%-git}
+  cd "$pkgname"
   if GITTAG="$(git describe --abbrev=0 --tags 2>/dev/null)"; then
     echo "$(sed -e "s/^${pkgname%%-git}//" -e 's/^[-_/a-zA-Z]\+//' -e 's/[_-+]/./g' <<< ${GITTAG}).r$(git rev-list --count ${GITTAG}..).g$(git log -1 --format="%h")"
   else
@@ -27,7 +28,7 @@ pkgver() {
 }
 
 prepare() {
-  cd ${pkgname%%-git}
+  cd "$srcdir/$pkgname"
   # workaround for submodules
   git submodule init
   git config submodule.clique.url "$srcdir/clique"
@@ -35,14 +36,16 @@ prepare() {
 }
 
 build() {
-  make -C "envoy"
+  cd "$srcdir/$pkgname"
+  make
 }
 
 package() {
-  make -C "envoy" DESTDIR="$pkgdir" install
+  cd "$srcdir/$pkgname"
+  make DESTDIR="$pkgdir" install
   mkdir "$pkgdir/usr/lib/systemd/user"
   cd "$pkgdir/usr/lib/systemd/user"
   ln -s "$pkdir/usr/lib/systemd/system/envoy@.service" "$pkdir/usr/lib/systemd/system/envoy@.socket" .
 }
 
-# vim: ft=sh ts=2 sw=2 et
+# vim: set ft=sh syn=sh ts=2 sw=2 et:
