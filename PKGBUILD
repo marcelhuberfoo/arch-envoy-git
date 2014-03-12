@@ -2,7 +2,7 @@
 # Contributor: Marcel Huber <`echo "moc tknup liamg tä oofrebuhlecram" | rev`>
 
 pkgname=envoy-git
-pkgver=7.r8.gf510efd
+pkgver=7.r28.g83307d5
 pkgrel=1
 pkgdesc="A ssh-agent/gpg-agent keychain and process monitor"
 arch=('i686' 'x86_64')
@@ -19,11 +19,13 @@ sha1sums=('SKIP'
           'SKIP')
 
 pkgver() {
-  cd "$pkgname"
+  cd "$srcdir/$pkgname"
   if GITTAG="$(git describe --abbrev=0 --tags 2>/dev/null)"; then
-    echo "$(sed -e "s/^${pkgname%%-git}//" -e 's/^[-_/a-zA-Z]\+//' -e 's/[_-+]/./g' <<< ${GITTAG}).r$(git rev-list --count ${GITTAG}..).g$(git log -1 --format="%h")"
+    local _revs_ahead_tag=$(git rev-list --count ${GITTAG}..)
+    local _commit_id_short=$(git log -1 --format=%h)
+    echo $(sed -e s/^${pkgname%%-git}// -e 's/^[-_/a-zA-Z]\+//' -e 's/[-_+]/./g' <<< ${GITTAG}).r${_revs_ahead_tag}.g${_commit_id_short}
   else
-    echo "0.r$(git rev-list --count master).g$(git log -1 --format="%h")"
+    echo 0.$(git rev-list --count master).g$(git log -1 --format=%h)
   fi
 }
 
