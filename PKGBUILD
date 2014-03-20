@@ -2,7 +2,7 @@
 # Contributor: Marcel Huber <`echo "moc tknup liamg tä oofrebuhlecram" | rev`>
 
 pkgname=envoy-git
-pkgver=7.r28.g83307d5
+pkgver=7.43.g2b7ea12
 pkgrel=1
 pkgdesc="A ssh-agent/gpg-agent keychain and process monitor"
 arch=('i686' 'x86_64')
@@ -13,17 +13,15 @@ optdepends=('gnupg: gpg-agent support')
 makedepends=('git' 'ragel')
 conflicts=('envoy')
 provides=('envoy')
-source=("$pkgname"::'git+git://github.com/vodik/envoy.git'
-        'git+git://github.com/vodik/clique.git')
-sha1sums=('SKIP'
-          'SKIP')
+source=("$pkgname"::'git+git://github.com/vodik/envoy.git')
+sha1sums=('SKIP')
 
 pkgver() {
   cd "$srcdir/$pkgname"
   if GITTAG="$(git describe --abbrev=0 --tags 2>/dev/null)"; then
     local _revs_ahead_tag=$(git rev-list --count ${GITTAG}..)
     local _commit_id_short=$(git log -1 --format=%h)
-    echo $(sed -e s/^${pkgname%%-git}// -e 's/^[-_/a-zA-Z]\+//' -e 's/[-_+]/./g' <<< ${GITTAG}).r${_revs_ahead_tag}.g${_commit_id_short}
+    echo $(sed -e s/^${pkgname%%-git}// -e 's/^[-_/a-zA-Z]\+//' -e 's/[-_+]/./g' <<< ${GITTAG}).${_revs_ahead_tag}.g${_commit_id_short}
   else
     echo 0.$(git rev-list --count master).g$(git log -1 --format=%h)
   fi
@@ -31,10 +29,6 @@ pkgver() {
 
 prepare() {
   cd "$srcdir/$pkgname"
-  # workaround for submodules
-  git submodule init
-  git config submodule.clique.url "$srcdir/clique"
-  git submodule update
 }
 
 build() {
