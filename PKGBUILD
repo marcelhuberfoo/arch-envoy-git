@@ -2,7 +2,7 @@
 # Contributor: Marcel Huber <`echo "moc tknup liamg tä oofrebuhlecram" | rev`>
 
 pkgname=envoy-git
-pkgver=8.25.g7c667a6
+pkgver=9.0.g08e627d
 pkgrel=1
 pkgdesc="A ssh-agent/gpg-agent keychain and process monitor"
 arch=('i686' 'x86_64')
