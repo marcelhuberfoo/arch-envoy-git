@@ -2,7 +2,7 @@
 # Contributor: Marcel Huber <`echo "moc tknup liamg tä oofrebuhlecram" | rev`>
 
 pkgname=envoy-git
-pkgver=9.5.ge841ea6
+pkgver=11.1.6.g3a29265
 pkgrel=1
 pkgdesc="A ssh-agent/gpg-agent keychain and process monitor"
 arch=('i686' 'x86_64')
@@ -39,9 +39,6 @@ build() {
 package() {
   cd "$srcdir/$pkgname"
   make DESTDIR="$pkgdir" install
-  mkdir "$pkgdir/usr/lib/systemd/user"
-  cd "$pkgdir/usr/lib/systemd/user"
-  ln -s "$pkdir/usr/lib/systemd/system/envoy@.service" "$pkdir/usr/lib/systemd/system/envoy@.socket" .
 }
 
 # vim: set ft=sh syn=sh ts=2 sw=2 et:
